@@ -1,6 +1,7 @@
 # 一省一菜 · 中国美食地图
 
-一个交互式的中国美食数据可视化项目，展示中国34个省份/地区的代表性美食。
+一个交互式的中国美食数据可视化项目，展示中国34个省级行政区的代表性美食。
+[https://afallenmoon.github.io/interact-china-food-map/](https://afallenmoon.github.io/interact-china-food-map/)
 
 ## 功能特性
 
@@ -12,10 +13,12 @@
 
 ## 技术栈
 
-- HTML5 + 原生 JavaScript
-- Tailwind CSS (CDN)
-- ECharts 5.4.3 + echarts-wordcloud
-- Google Fonts (Inter)
+- **前端框架**: HTML5 + 原生 JavaScript
+- **样式框架**: Tailwind CSS (CDN)
+- **可视化库**: ECharts 5.4.3 + echarts-wordcloud 插件
+- **字体**: Google Fonts (Inter)
+- **数据格式**: JSON (`foods.json`, `provinces.json`, `china.json`)
+- **图标库**: Heroicons
 
 ## 本地运行
 
@@ -47,9 +50,7 @@ cd interact-china-food-map
 
 ## 部署
 
-本项目已配置 GitHub Actions，推送到 `main` 或 `master` 分支后会自动部署到 GitHub Pages。
-
-访问地址：`https://<your-username>.github.io/<repo-name>/`
+本项目已配置 GitHub Actions，推送到 `main` 分支后会自动部署到 GitHub Pages。
 
 ## 项目结构
 
@@ -58,8 +59,10 @@ interact-china-food-map/
 ├── index.html              # 主页面
 ├── app.js                  # 核心逻辑
 ├── data/                   # 数据文件
-│   ├── foods.json         # 美食数据
-│   └── provinces.json     # 省份数据
-├── images/                # 美食图片
+│   ├── foods.json          # 美食数据
+│   ├── foods.schema.json   # 美食数据规范
+│   ├── provinces.json      # 省份数据
+|   └── china.json          # 地图数据
+├── images/                 # 美食图片
 └── .github/workflows/      # GitHub Actions 配置
 ```

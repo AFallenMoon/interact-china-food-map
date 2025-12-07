@@ -99,7 +99,14 @@ async function initChinaMap() {
 
   if (!echarts.getMap('china')) {
     try {
-      const resp = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
+      // 优先从本地加载地图数据，避免 GitHub Pages 上的 CORS 问题
+      let resp = await fetch('data/china.json');
+      
+      // 如果本地文件不存在，尝试从外部 API 加载
+      if (!resp.ok) {
+        resp = await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json');
+      }
+      
       if (!resp.ok) throw new Error('加载失败');
       const geoJson = await resp.json();
       echarts.registerMap('china', geoJson);

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Food Item Schema",
+  "description": "Schema for a food item in the cuisine map project",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "province_code",
+    "cuisine",
+    "taste_tags",
+    "description",
+    "image"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the food item"
+    },
+
+    "name": {
+      "type": "string",
+      "description": "Food name in Chinese"
+    },
+
+    "province_code": {
+      "type": "string",
+      "description": "Province code from provinces.json",
+      "pattern": "^(11|12|13|14|15|21|22|23|31|32|33|34|35|36|37|41|42|43|44|45|46|50|51|52|53|54|61|62|63|64|65|71|81|82)$"
+    },
+
+    "cuisine": {
+      "type": "string",
+      "description": "Cuisine type (e.g., 京菜, 川菜, 粤菜)"
+    },
+
+    "taste_tags": {
+      "type": "array",
+      "description": "Taste labels such as 辣/甜/酸/苦/咸/鲜/清淡/麻/香",
+      "items": {
+        "type": "string",
+        "enum": ["酸", "甜", "苦", "辣", "咸", "鲜", "清淡", "麻", "香"]
+      },
+      "minItems": 1
+    },
+
+    "description": {
+      "type": "string",
+      "description": "Short description of the food"
+    },
+
+    "image": {
+      "type": "string",
+      "description": "Relative image path (required)",
+      "pattern": "^.+\\.(jpg|jpeg|png|webp|gif)$"
+    },
+
+    "ingredients": {
+      "type": "array",
+      "description": "Ingredients used in the dish",
+      "items": { "type": "string" },
+      "default": []
+    },
+
+    "similar_foods": {
+      "type": "array",
+      "description": "List of related food IDs",
+      "items": { "type": "string" },
+      "default": []
+    },
+
+    "history": {
+      "type": "object",
+      "description": "Historical info",
+      "properties": {
+        "origin_year": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Approximate origin year (AD)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "additionalProperties": false
+}

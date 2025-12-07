@@ -1,0 +1,778 @@
+[
+  {
+    "id": "bj_roast_duck",
+    "name": "北京烤鸭",
+    "province_code": "11",
+    "cuisine": "京菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "京菜代表作之一，先将整鸭吹皮风干，再入炉明火烤制，成菜皮酥肉嫩、色泽红亮，通常配薄饼、黄瓜条和甜面酱卷食。",
+    "image": "images/bj_roast_duck.png",
+    "ingredients": [
+      "鸭子",
+      "蜂蜜",
+      "葱",
+      "黄瓜",
+      "甜面酱",
+      "薄饼"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1400
+    }
+  },
+  {
+    "id": "tj_goubuli",
+    "name": "狗不理包子",
+    "province_code": "12",
+    "cuisine": "津菜",
+    "taste_tags": [
+      "鲜",
+      "咸"
+    ],
+    "description": "天津百年老字号点心，包子外皮松软有筋道，褶子细密均匀，内馅多汁鲜香，是津门传统早点代表之一。",
+    "image": "images/tj_goubuli.webp",
+    "ingredients": [
+      "猪肉",
+      "面粉",
+      "酵母",
+      "葱姜",
+      "酱油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1858
+    }
+  },
+  {
+    "id": "hb_lvrou_huoshao",
+    "name": "驴肉火烧",
+    "province_code": "13",
+    "cuisine": "冀菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "河北保定传统名吃，酥脆的火烧饼中夹入卤制入味的驴肉，肥瘦相间、咸鲜适口，被誉为天上龙肉地下驴肉。",
+    "image": "images/hb_lvrou_huoshao.jpg",
+    "ingredients": [
+      "驴肉",
+      "面粉",
+      "食用油",
+      "花椒",
+      "八角"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "sx_daoxiaomian",
+    "name": "刀削面",
+    "province_code": "14",
+    "cuisine": "晋菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "山西标志性面食，将和好的面坯直接用刀削入滚汤之中，面叶厚薄均匀，入口筋道爽滑，常配以牛羊肉汤或臊子浇头。",
+    "image": "images/sx_daoxiaomian.webp",
+    "ingredients": [
+      "面粉",
+      "碱水"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1500
+    }
+  },
+  {
+    "id": "nmg_kaoquanyang",
+    "name": "烤全羊",
+    "province_code": "15",
+    "cuisine": "蒙菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "内蒙古草原传统盛宴，多在节庆或接待贵宾时食用，将整羊腌制后架在炭火上慢烤，外皮金黄酥脆、肉质鲜嫩多汁，极具草原特色。",
+    "image": "images/nmg_kaoquanyang.jpg",
+    "ingredients": [
+      "整羊",
+      "孜然",
+      "黑胡椒"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1200
+    }
+  },
+  {
+    "id": "ln_congshao_liaoshen",
+    "name": "葱烧辽参",
+    "province_code": "21",
+    "cuisine": "辽菜",
+    "taste_tags": [
+      "鲜",
+      "清淡"
+    ],
+    "description": "选用优质辽参发制后，与大葱一同下锅，用高汤小火焖烧至入味，成菜汤汁浓郁、海参软糯弹牙，是辽宁沿海地区的经典高档菜肴。",
+    "image": "images/ln_congshao_liaoshen.jpg",
+    "ingredients": [
+      "辽参",
+      "大葱",
+      "高汤",
+      "酱油",
+      "料酒"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1950
+    }
+  },
+  {
+    "id": "jl_bairou_xuechang",
+    "name": "白肉血肠",
+    "province_code": "22",
+    "cuisine": "东北菜",
+    "taste_tags": [
+      "鲜",
+      "咸",
+      "酸"
+    ],
+    "description": "吉林传统满族菜肴，通常以五花肉与血肠搭配，与酸菜同锅炖煮，白肉肥而不腻、血肠软糯入味，是东北冬季杀猪菜中的经典组合。",
+    "image": "images/jl_bairou_xuechang.webp",
+    "ingredients": [
+      "五花肉",
+      "血肠",
+      "酸菜",
+      "葱姜"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1700
+    }
+  },
+  {
+    "id": "hlj_hongchang",
+    "name": "哈尔滨红肠",
+    "province_code": "23",
+    "cuisine": "东北菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "受俄式香肠工艺影响的东北特色肉制品，采用猪肉与多种香料灌制后经烟熏而成，肠体呈红褐色、口感紧实富有弹性，冷食热食皆宜。",
+    "image": "images/hlj_hongchang.png",
+    "ingredients": [
+      "猪肉",
+      "蒜",
+      "黑胡椒"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "sh_shuijing_xiaren",
+    "name": "水晶虾仁",
+    "province_code": "31",
+    "cuisine": "本帮菜",
+    "taste_tags": [
+      "鲜",
+      "清淡"
+    ],
+    "description": "以上等河虾仁为主料，经过腌制与挂糊后快火滑炒，成菜颗颗分明、色泽晶莹剔透，入口爽脆鲜甜，是本帮菜中最具代表性的清爽菜之一。",
+    "image": "images/sh_shuijing_xiaren.jpeg",
+    "ingredients": [
+      "虾仁",
+      "蛋清",
+      "淀粉",
+      "葱姜",
+      "食用油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "js_yangzhou_chaofan",
+    "name": "扬州炒饭",
+    "province_code": "32",
+    "cuisine": "苏菜",
+    "taste_tags": [
+      "鲜",
+      "咸"
+    ],
+    "description": "淮扬菜代表作之一，以隔夜米饭搭配鸡蛋丁、火腿丁、虾仁等多种配料，用小火慢炒至粒粒金黄分明，色彩丰富、咸鲜适口。",
+    "image": "images/js_yangzhou_chaofan.png",
+    "ingredients": [
+      "米饭",
+      "鸡蛋",
+      "火腿",
+      "虾仁",
+      "青豆",
+      "胡萝卜"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "zj_xihu_cuyu",
+    "name": "西湖醋鱼",
+    "province_code": "33",
+    "cuisine": "浙菜",
+    "taste_tags": [
+      "甜",
+      "酸"
+    ],
+    "description": "杭州名菜，选用活草鱼烹制，采用先煮后浇糖醋芡汁的做法，鱼肉保持鲜嫩细腻，酸甜适口，因多在西湖附近菜馆供应而得名。",
+    "image": "images/zj_xihu_cuyu.jpeg",
+    "ingredients": [
+      "草鱼",
+      "糖",
+      "醋",
+      "酱油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1200
+    }
+  },
+  {
+    "id": "ah_chouguaiyu",
+    "name": "徽州臭鳜鱼",
+    "province_code": "34",
+    "cuisine": "徽菜",
+    "taste_tags": [
+      "鲜",
+      "咸"
+    ],
+    "description": "徽菜经典名肴，将鳜鱼用米酒和盐腌制发酵后再红烧入味，成菜外表酱红、鱼肉细嫩，闻之有特殊发酵气味，入口却鲜香浓郁、回味悠长。",
+    "image": "images/ah_chouguaiyu.jpeg",
+    "ingredients": [
+      "鳜鱼",
+      "黄酒",
+      "酱油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "fj_fotiaoqiang",
+    "name": "佛跳墙",
+    "province_code": "35",
+    "cuisine": "闽菜",
+    "taste_tags": [
+      "鲜",
+      "咸",
+      "香"
+    ],
+    "description": "福建传统名菜，以鲍鱼、海参、鱼翅、花胶等多种珍贵食材，配以高汤慢火煨制而成，汤浓味鲜、营养丰富，被誉为\"闽菜之首\"。",
+    "image": "images/fj_fotiaoqiang.jpeg",
+    "ingredients": [
+      "鲍鱼",
+      "海参",
+      "鱼翅",
+      "花胶",
+      "瑶柱",
+      "冬菇",
+      "高汤"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1876
+    }
+  },
+  {
+    "id": "jx_nanchang_banfen",
+    "name": "南昌拌粉",
+    "province_code": "36",
+    "cuisine": "赣菜",
+    "taste_tags": [
+      "辣",
+      "鲜"
+    ],
+    "description": "江西南昌极具代表性的街头早点，将烫熟的米粉与当地特制辣椒油、酱汁、葱蒜和花生碎拌匀，口味香辣鲜香、粉质柔韧，是当地人离不开的家乡味道。",
+    "image": "images/jx_nanchang_banfen.jpg",
+    "ingredients": [
+      "米粉",
+      "辣椒油",
+      "葱蒜",
+      "酱油",
+      "花生碎"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "sd_tangculiyu",
+    "name": "糖醋鲤鱼",
+    "province_code": "37",
+    "cuisine": "鲁菜",
+    "taste_tags": [
+      "甜",
+      "酸"
+    ],
+    "description": "鲁菜经典名菜之一，整条鲤鱼去骨造型后挂糊油炸，再浇上糖醋汁，鱼身外酥里嫩、酸甜浓郁，常出现在喜庆宴席之上。",
+    "image": "images/sd_tangculiyu.png",
+    "ingredients": [
+      "鲤鱼",
+      "糖",
+      "醋",
+      "番茄酱",
+      "淀粉"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1600
+    }
+  },
+  {
+    "id": "hn_huimian",
+    "name": "烩面",
+    "province_code": "41",
+    "cuisine": "豫菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "河南特色汤面，将宽面条与熬制数小时的骨汤同煮，配以羊肉片或杂肠等浇头，汤浓味鲜、面条筋道，被誉为中原第一面。",
+    "image": "images/hn_huimian.jpeg",
+    "ingredients": [
+      "面粉",
+      "羊肉",
+      "骨头汤",
+      "香菜"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "hb_reganmian",
+    "name": "武汉热干面",
+    "province_code": "42",
+    "cuisine": "鄂菜",
+    "taste_tags": [
+      "咸",
+      "鲜",
+      "香"
+    ],
+    "description": "武汉人最常见的早餐之一，将碱水面条煮熟晾干后与浓香芝麻酱、酱油和榨菜丁拌匀，面条筋道不汤不水，芝麻香气扑鼻。",
+    "image": "images/hb_reganmian.jpg",
+    "ingredients": [
+      "碱水面条",
+      "芝麻酱",
+      "酱油",
+      "榨菜"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1930
+    }
+  },
+  {
+    "id": "hn_duojiao_yutou",
+    "name": "剁椒鱼头",
+    "province_code": "43",
+    "cuisine": "湘菜",
+    "taste_tags": [
+      "辣",
+      "鲜"
+    ],
+    "description": "湘菜名品之一，选用大鱼头对剖后铺满湖南特制剁椒上锅清蒸，成菜色泽红亮、蒸汽中带着浓郁辣香，鱼肉细嫩入味、下饭极佳。",
+    "image": "images/hn_duojiao_yutou.jpg",
+    "ingredients": [
+      "胖鱼头",
+      "剁椒",
+      "姜蒜",
+      "葱花"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "gd_shahefen",
+    "name": "沙河粉",
+    "province_code": "44",
+    "cuisine": "粤菜",
+    "taste_tags": [
+      "鲜",
+      "清淡"
+    ],
+    "description": "广东经典米粉类小吃，以米浆蒸成宽而薄的粉皮切条，粉身晶莹、口感顺滑，可做成干炒牛河或云吞河粉等多种吃法。",
+    "image": "images/gd_shahefen.jpeg",
+    "ingredients": [
+      "米浆",
+      "食用油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "gx_luosi_fen",
+    "name": "螺蛳粉",
+    "province_code": "45",
+    "cuisine": "桂菜",
+    "taste_tags": [
+      "酸",
+      "辣",
+      "鲜"
+    ],
+    "description": "广西柳州的网红小吃，以螺蛳熬制的酸辣汤底为魂，配以酸笋、花生、油炸腐竹等多种配料，味型酸、辣、鲜、臭交织，风味独特。",
+    "image": "images/gx_luosi_fen.png",
+    "ingredients": [
+      "米粉",
+      "螺蛳汤",
+      "酸笋",
+      "花生",
+      "腐竹"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1970
+    }
+  },
+  {
+    "id": "hn_wenchangji",
+    "name": "文昌鸡",
+    "province_code": "46",
+    "cuisine": "琼菜",
+    "taste_tags": [
+      "鲜",
+      "清淡"
+    ],
+    "description": "海南四大名菜之一，选用品种特有的文昌鸡，小火煮熟后保持皮脆肉嫩，切块配以香葱姜蓉蘸酱食用，最大限度保留鸡肉原始鲜味。",
+    "image": "images/hn_wenchangji.jpg",
+    "ingredients": [
+      "文昌鸡",
+      "姜",
+      "葱",
+      "酱油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1600
+    }
+  },
+  {
+    "id": "cq_hotpot",
+    "name": "重庆火锅",
+    "province_code": "50",
+    "cuisine": "川菜",
+    "taste_tags": [
+      "辣",
+      "麻",
+      "鲜"
+    ],
+    "description": "重庆城市名片式美食，以牛油为锅底加入大量辣椒与花椒炒制成红汤，涮食毛肚、黄喉、鸭肠等食材，麻辣浓郁、热烈奔放，是川渝聚餐首选。",
+    "image": "images/cq_hotpot.jpg",
+    "ingredients": [
+      "牛油",
+      "辣椒",
+      "花椒",
+      "豆瓣酱"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "sc_mapo_tofu",
+    "name": "麻婆豆腐",
+    "province_code": "51",
+    "cuisine": "川菜",
+    "taste_tags": [
+      "辣",
+      "麻",
+      "鲜"
+    ],
+    "description": "川菜代表名品，用牛肉末、豆瓣酱和花椒等煸炒出红油，再下入嫩豆腐同煮，成菜色泽红亮、入口麻辣鲜香、豆腐细嫩，佐饭下酒皆宜。",
+    "image": "images/sc_mapo_tofu.png",
+    "ingredients": [
+      "嫩豆腐",
+      "牛肉末",
+      "辣椒",
+      "花椒",
+      "豆瓣酱"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1862
+    }
+  },
+  {
+    "id": "gz_suantangyu",
+    "name": "酸汤鱼",
+    "province_code": "52",
+    "cuisine": "黔菜",
+    "taste_tags": [
+      "酸",
+      "鲜",
+      "辣"
+    ],
+    "description": "贵州黔东南地区特色菜肴，以辣椒和番茄发酵制成的酸汤为底，煮入鲜鱼片，汤色红亮、味道酸爽开胃，兼具苗侗风味与山地气息。",
+    "image": "images/gz_suantangyu.jpg",
+    "ingredients": [
+      "鲜鱼",
+      "番茄",
+      "酸汤底",
+      "辣椒"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "yn_guoqiaomixian",
+    "name": "过桥米线",
+    "province_code": "53",
+    "cuisine": "滇菜",
+    "taste_tags": [
+      "鲜",
+      "清淡"
+    ],
+    "description": "云南最具代表性的米线吃法之一，将滚烫的鸡汤或骨汤盛于大碗中，加入生肉片、蔬菜和米线烫熟食用，特点是汤鲜味美、配料丰富。",
+    "image": "images/yn_guoqiaomixian.jpeg",
+    "ingredients": [
+      "米线",
+      "鸡汤",
+      "瘦肉片",
+      "蔬菜",
+      "鸡蛋"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "xz_suyoucha",
+    "name": "酥油茶",
+    "province_code": "54",
+    "cuisine": "藏菜",
+    "taste_tags": [
+      "咸",
+      "香"
+    ],
+    "description": "藏族日常饮品，将酥油、砖茶和适量食盐放入木桶中反复摇打乳化而成，口味咸香浓郁，能量高、御寒保暖，是高原生活的重要组成部分。",
+    "image": "images/xz_suyoucha.webp",
+    "ingredients": [
+      "酥油",
+      "砖茶"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1000
+    }
+  },
+  {
+    "id": "sx_roujiamo",
+    "name": "肉夹馍",
+    "province_code": "61",
+    "cuisine": "陕菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "陕西极具代表性的街头小吃，将长时间卤制入味的腊汁肉切碎后夹入刚出炉的白吉馍中，外皮酥脆内里柔软，被称为中国汉堡。",
+    "image": "images/sx_roujiamo.jpg",
+    "ingredients": [
+      "腊汁肉",
+      "白吉馍",
+      "香料"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1600
+    }
+  },
+  {
+    "id": "gs_lanzhou_lamian",
+    "name": "兰州拉面",
+    "province_code": "62",
+    "cuisine": "陇菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "甘肃最具知名度的清真牛肉面，以手工拉制的细长面条配上清亮牛肉汤、白萝卜片和辣油等，讲究一清二白三红四绿五黄的色泽层次。",
+    "image": "images/gs_lanzhou_lamian.jpg",
+    "ingredients": [
+      "面粉",
+      "牛肉",
+      "牛骨汤",
+      "白萝卜",
+      "辣油"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1915
+    }
+  },
+  {
+    "id": "qh_mianpian",
+    "name": "青海尕面片",
+    "province_code": "63",
+    "cuisine": "青菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "青海常见家常主食，将面团揪成不规则的小片下入汤锅，再配以牛羊肉丁和蔬菜同煮，成菜汤香浓郁、面片筋道，是高原地区暖胃之选。",
+    "image": "images/qh_mianpian.jpg",
+    "ingredients": [
+      "面粉",
+      "牛羊肉",
+      "土豆",
+      "西红柿"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1800
+    }
+  },
+  {
+    "id": "nx_yangza",
+    "name": "羊杂碎",
+    "province_code": "64",
+    "cuisine": "宁菜",
+    "taste_tags": [
+      "咸",
+      "鲜"
+    ],
+    "description": "宁夏传统清真小吃，以羊心、羊肝、羊肺等杂碎洗净煮熟后切片，再配以高汤、粉丝和香菜出碗，汤鲜味浓、羊香扑鼻，常见于清晨街头。",
+    "image": "images/nx_yangza.webp",
+    "ingredients": [
+      "羊杂",
+      "高汤",
+      "粉丝",
+      "香菜",
+      "葱花"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1850
+    }
+  },
+  {
+    "id": "xj_kawap",
+    "name": "新疆烤串",
+    "province_code": "65",
+    "cuisine": "新菜",
+    "taste_tags": [
+      "咸",
+      "鲜",
+      "辣",
+      "香"
+    ],
+    "description": "新疆最具代表性的烧烤小吃之一，以羊肉块串在铁签上，撒上孜然和辣椒粉后架在炭火上现烤，外焦里嫩、肉香四溢，是当地夜市灵魂。",
+    "image": "images/xj_kawap.jpeg",
+    "ingredients": [
+      "羊肉",
+      "孜然",
+      "辣椒粉"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1600
+    }
+  },
+  {
+    "id": "hk_bifengtang_chaoxie",
+    "name": "避风塘炒蟹",
+    "province_code": "81",
+    "cuisine": "港式粤菜",
+    "taste_tags": [
+      "香",
+      "辣",
+      "鲜"
+    ],
+    "description": "香港经典海鲜菜，以新鲜螃蟹配以大量蒜蓉、豆豉、辣椒等调料爆炒而成，蒜香浓郁、蟹肉鲜甜，是避风塘菜系的代表之作。",
+    "image": "images/hk_bifengtang_chaoxie.jpeg",
+    "ingredients": [
+      "螃蟹",
+      "蒜蓉",
+      "豆豉",
+      "辣椒",
+      "葱",
+      "姜"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1950
+    }
+  },
+  {
+    "id": "mo_hongjiu_hui_niuwei",
+    "name": "红酒烩牛尾",
+    "province_code": "82",
+    "cuisine": "葡式澳门菜",
+    "taste_tags": [
+      "香",
+      "鲜",
+      "咸"
+    ],
+    "description": "澳门特色菜，融合了中葡烹饪技法，以牛尾配以红酒、番茄、洋葱等食材慢火烩制，肉质软烂、汤汁浓郁，体现了澳门多元文化的美食特色。",
+    "image": "images/mo_hongjiu_hui_niuwei.jpeg",
+    "ingredients": [
+      "牛尾",
+      "红酒",
+      "番茄",
+      "洋葱",
+      "胡萝卜",
+      "西芹",
+      "香料"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1900
+    }
+  },
+  {
+    "id": "tw_sanbeiji",
+    "name": "三杯鸡",
+    "province_code": "71",
+    "cuisine": "台菜",
+    "taste_tags": [
+      "香",
+      "鲜",
+      "咸"
+    ],
+    "description": "台湾经典名菜，以一杯麻油、一杯酱油、一杯米酒为调料，配以九层塔（罗勒）与鸡肉同煮，香气四溢、肉质鲜嫩，是台湾最具代表性的家常菜之一。",
+    "image": "images/tw_sanbeiji.jpeg",
+    "ingredients": [
+      "鸡肉",
+      "麻油",
+      "酱油",
+      "米酒",
+      "九层塔",
+      "蒜",
+      "姜",
+      "辣椒"
+    ],
+    "similar_foods": [],
+    "history": {
+      "origin_year": 1700
+    }
+  }
+]

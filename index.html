@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一省一菜 · 中国美食地图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    
+    
+    /* 自定义滚动条样式：简洁风格，轨道透明，滑块蓝色 */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #3B82F6 transparent; /* Firefox: 滑块颜色 轨道颜色 */
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3B82F6;
+      border-radius: 3px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #2563EB;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-button {
+      width: 6px;
+      height: 6px;
+      background: transparent;
+      border: none;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-button:vertical:start:decrement {
+      background: linear-gradient(to bottom, rgba(59, 130, 246, 0.3), transparent);
+      border-radius: 3px 3px 0 0;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-button:vertical:end:increment {
+      background: linear-gradient(to top, rgba(59, 130, 246, 0.3), transparent);
+      border-radius: 0 0 3px 3px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-button:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900">
+  <div class="h-screen flex flex-col overflow-hidden">
+    <!-- 顶部导航 -->
+    <header class="header px-6 py-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 backdrop-blur-md border-b border-slate-200/60">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <!-- 左侧：标题与图标 -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+            <!-- Heroicons Map Pin Icon -->
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-slate-900">一省一菜</h1>
+            <p class="text-xs text-slate-600">交互式中国美食地图</p>
+          </div>
+        </div>
+
+        <!-- 右侧：搜索框和视图切换 -->
+        <div class="flex items-center gap-3">
+          <div class="w-full md:w-64">
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                id="keywordInput"
+                type="text"
+                placeholder="搜索美食、省份、菜系..."
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/90 border border-slate-200 text-sm placeholder:text-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 focus:bg-white transition-all"
+              />
+            </div>
+          </div>
+          
+          <!-- 视图切换按钮 -->
+          <div class="flex border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <button
+              id="view-detail-btn"
+              class="view-switch-btn active px-4 py-2.5 text-sm font-medium border-r border-slate-200 bg-blue-600 hover:bg-blue-700 text-white transition"
+              data-view="detail"
+            >
+              美食详情
+            </button>
+            <button
+              id="view-graph-btn"
+              class="view-switch-btn px-4 py-2.5 text-sm font-medium border-r border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition"
+              data-view="graph"
+            >
+              知识图谱
+            </button>
+            <button
+              id="view-stats-btn"
+              class="view-switch-btn px-4 py-2.5 text-sm font-medium bg-white hover:bg-slate-50 text-slate-700 transition"
+              data-view="stats"
+            >
+              统计图表
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <div class="view-content flex flex-col pb-6 px-6 pt-6 flex-1 min-h-0 overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch flex-1 min-h-0">
+        <!-- 左：地图模块 -->
+        <div class="min-h-0 flex flex-col">
+          <!-- 地图容器 -->
+          <div class="flex-1 min-h-0 overflow-hidden bg-white rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md relative">
+            <div id="chinaMap" class="w-full h-full"></div>
+            <div id="chinaMapFallback" class="hidden text-center py-12 text-red-500 text-sm">
+              地图加载失败，请检查网络连接
+            </div>
+            <!-- 地图重置按钮 -->
+            <button
+              id="resetMapBtn"
+              class="absolute bottom-4 left-4 px-4 py-2 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-md transition-all duration-200 z-10"
+              title="重置地图"
+            >
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 右：详情或图谱模块（根据视图切换） -->
+        <div class="min-h-0 flex flex-col">
+          <!-- 美食详情视图 -->
+          <div id="detail-view" class="view-panel flex-1 flex flex-col min-h-0 group">
+            <div id="foodDetail" class="flex-1 min-h-0 overflow-hidden bg-white/60 backdrop-blur-sm p-0 transition-all duration-300 group-hover:bg-white/80 rounded-xl border border-slate-200">
+              <!-- 内容将通过 JavaScript 动态填充 -->
+              <div class="text-center py-12">
+                <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110">
+                  <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <p class="text-slate-600 text-sm font-medium mb-2">选择省份查看美食</p>
+                <p class="text-slate-400 text-xs">点击地图上的省份</p>
+              </div>
+            </div>
+          </div>
+
+                  <!-- 知识图谱视图 -->
+                  <div id="graph-view" class="view-panel hidden flex-1 flex flex-col min-h-0 group">
+                    <div id="knowledgeGraph" class="flex-1 min-h-0 overflow-hidden bg-white/60 backdrop-blur-sm transition-all duration-300 group-hover:bg-white/80 rounded-xl border border-slate-200"></div>
+                  </div>
+
+                  <!-- 统计图表视图 -->
+                  <div id="stats-view" class="view-panel hidden flex-1 flex flex-col min-h-0 overflow-y-auto custom-scrollbar">
+                    <div class="px-4 pb-4 pt-0 space-y-4">
+                      <!-- 口味分布 -->
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 px-4 pb-4 pt-0">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-2 pt-4">口味分布</h3>
+                        <div id="tasteChart" class="w-full h-64"></div>
+                      </div>
+                      
+                      <!-- 食材词云 -->
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-4">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-2">食材词云</h3>
+                        <div id="ingredientWordCloud" class="w-full h-80"></div>
+                      </div>
+                      
+                      <!-- 起源时间 -->
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-4">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-2">起源时间</h3>
+                        <div id="timeChart" class="w-full h-96"></div>
+                      </div>
+                    </div>
+                  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>

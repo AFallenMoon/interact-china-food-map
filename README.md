@@ -1,6 +1,6 @@
 # 一省一菜 · 中国美食地图
 
-一个交互式的中国美食数据可视化项目，展示中国34个省级行政区的代表性美食。
+一个基于ECharts的交互式中国美食数据可视化项目，涵盖34个省份的代表性美食。项目提供美食详情、知识图谱和统计图表三种视图，可通过交互式地图探索美食，支持关键词搜索。知识图谱展示美食与口味、食材之间的关联关系，统计图表分析口味分布、食材频率和起源年代。
 [https://afallenmoon.github.io/interact-china-food-map/](https://afallenmoon.github.io/interact-china-food-map/)
 
 ## 功能特性

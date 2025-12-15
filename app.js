@@ -29,6 +29,17 @@ const smallAreaMarkers = [
   { name: '澳门特别行政区', coord: [113.45, 22.10] },
 ];
 
+// 地图初始缩放和中心点配置
+// 中心点坐标基于实际地图数据计算（排除南海九段线）
+// 计算边界框: 经度 73.502355 - 135.095670, 纬度 19.024038 - 53.563269
+const MAP_CONFIG = {
+  center: [104.299013, 36.293653], // 计算出的中心点坐标
+  zoom: {
+    mobile: 1.8,   // 移动端缩放
+    desktop: 1.6   // 桌面端缩放
+  }
+};
+
 // ========== 数据加载 ==========
 async function loadData() {
   try {
@@ -129,14 +140,15 @@ async function initChinaMap() {
 
     // 检测是否为移动设备
     const isMobile = window.innerWidth < 768;
+    const mapZoom = isMobile ? MAP_CONFIG.zoom.mobile : MAP_CONFIG.zoom.desktop;
     
     const option = {
       backgroundColor: 'transparent',
       geo: {
         map: 'china',
         roam: true,
-        zoom: isMobile ? 2 : 1.6, // 使用zoom控制缩放：移动端2，电脑端1.6
-        center: [105, 36],
+        zoom: mapZoom,
+        center: MAP_CONFIG.center,
         selectedMode: 'multiple',
         itemStyle: {
           areaColor: '#F8FAFC',
@@ -863,12 +875,13 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
     
     // 检测是否为移动设备
     const isMobile = window.innerWidth < 768;
+    const mapZoom = isMobile ? MAP_CONFIG.zoom.mobile : MAP_CONFIG.zoom.desktop;
     
     // 重置地图缩放和位置 - 使用 setOption 更新
     chinaMapChart.setOption({
       geo: {
-        zoom: isMobile ? 1.2 : 1.5,
-        center: [105, 36]
+        zoom: mapZoom,
+        center: MAP_CONFIG.center
       }
     }, false);
     
@@ -877,8 +890,8 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
     if (currentOption.series && currentOption.series[0]) {
       chinaMapChart.setOption({
         series: [{
-          zoom: isMobile ? 1.2 : 1.5,
-          center: [105, 36]
+          zoom: mapZoom,
+          center: MAP_CONFIG.center
         }]
       }, false);
     }

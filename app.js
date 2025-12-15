@@ -877,24 +877,14 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
     const isMobile = window.innerWidth < 768;
     const mapZoom = isMobile ? MAP_CONFIG.zoom.mobile : MAP_CONFIG.zoom.desktop;
     
-    // 重置地图缩放和位置 - 使用 setOption 更新
+    // 重置地图缩放和位置
+    // 注意：series 使用 geoIndex: 0，所以只需要更新 geo 配置即可
     chinaMapChart.setOption({
       geo: {
         zoom: mapZoom,
         center: MAP_CONFIG.center
       }
     }, false);
-    
-    // 同时更新 series 中的 map 配置
-    const currentOption = chinaMapChart.getOption();
-    if (currentOption.series && currentOption.series[0]) {
-      chinaMapChart.setOption({
-        series: [{
-          zoom: mapZoom,
-          center: MAP_CONFIG.center
-        }]
-      }, false);
-    }
   }
   
   // 更新标记点样式

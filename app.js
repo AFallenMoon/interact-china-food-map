@@ -448,9 +448,9 @@ function renderFoodDetail(list) {
           <p class="text-xs sm:text-sm text-white/95 leading-relaxed drop-shadow-md mb-2 sm:mb-3 line-clamp-3 sm:line-clamp-none">${food.description || ''}</p>
           
           <!-- 主要食材和历史起源并列 -->
-          <div class="flex flex-col sm:flex-row items-start gap-2 sm:gap-4">
+          <div class="flex flex-row items-start gap-2 sm:gap-4">
             <!-- 主要食材 -->
-            <div class="flex-[2] w-full sm:w-auto">
+            <div class="flex-[2]">
               <div class="flex items-center gap-2 mb-1.5 sm:mb-2">
                 <div class="text-[10px] sm:text-xs font-semibold text-white drop-shadow-md">主要食材</div>
               </div>
@@ -463,7 +463,7 @@ function renderFoodDetail(list) {
             
             ${food.history?.origin_year ? `
             <!-- 历史起源 -->
-            <div class="flex-1 w-full sm:w-auto">
+            <div class="flex-1">
               <div class="flex items-center gap-2 mb-1.5 sm:mb-2">
                 <div class="text-[10px] sm:text-xs font-semibold text-white drop-shadow-md">历史起源</div>
               </div>
@@ -877,9 +877,12 @@ function switchView(view) {
   const detailBtn = document.getElementById('view-detail-btn');
   const graphBtn = document.getElementById('view-graph-btn');
   const statsBtn = document.getElementById('view-stats-btn');
+  const detailBtnMobile = document.getElementById('view-detail-btn-mobile');
+  const graphBtnMobile = document.getElementById('view-graph-btn-mobile');
+  const statsBtnMobile = document.getElementById('view-stats-btn-mobile');
   
-  // 重置所有按钮样式
-  [detailBtn, graphBtn, statsBtn].forEach(btn => {
+  // 重置所有按钮样式（桌面端和移动端）
+  [detailBtn, graphBtn, statsBtn, detailBtnMobile, graphBtnMobile, statsBtnMobile].forEach(btn => {
     if (btn) {
       btn.classList.remove('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
       btn.classList.add('bg-white', 'hover:bg-slate-50', 'text-slate-700');
@@ -895,11 +898,15 @@ function switchView(view) {
     detailView?.classList.remove('hidden');
     detailBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
     detailBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
+    detailBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
+    detailBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
     applyFilters();
   } else if (view === 'graph') {
     graphView?.classList.remove('hidden');
     graphBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
     graphBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
+    graphBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
+    graphBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
     applyFilters();
     setTimeout(() => {
       knowledgeGraphChart && knowledgeGraphChart.resize();
@@ -908,6 +915,8 @@ function switchView(view) {
     statsView?.classList.remove('hidden');
     statsBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
     statsBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
+    statsBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
+    statsBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
     updateStatsCharts();
     setTimeout(() => {
       tasteChart && tasteChart.resize();
@@ -917,7 +926,7 @@ function switchView(view) {
   }
 }
 
-// 视图切换按钮事件
+// 视图切换按钮事件（桌面端和移动端）
 document.getElementById('view-detail-btn')?.addEventListener('click', () => {
   switchView('detail');
 });
@@ -927,6 +936,19 @@ document.getElementById('view-graph-btn')?.addEventListener('click', () => {
 });
 
 document.getElementById('view-stats-btn')?.addEventListener('click', () => {
+  switchView('stats');
+});
+
+// 移动端按钮事件
+document.getElementById('view-detail-btn-mobile')?.addEventListener('click', () => {
+  switchView('detail');
+});
+
+document.getElementById('view-graph-btn-mobile')?.addEventListener('click', () => {
+  switchView('graph');
+});
+
+document.getElementById('view-stats-btn-mobile')?.addEventListener('click', () => {
   switchView('stats');
 });
 

@@ -103,7 +103,7 @@
         margin-top: 0 !important; /* 移除margin，使用gap控制间距 */
       }
       
-      /* 移动端地图容器优化 - 高度更矮，内容向上移动 */
+      /* 移动端地图容器优化 - 内容向上移动并放大 */
       .view-content > div > div:first-child > div {
         padding-bottom: 1.5rem !important; /* 增加底部padding，让地图内容相对向上 */
       }
@@ -112,6 +112,8 @@
         min-height: 250px;
         height: calc(100% + 1.5rem); /* 增加高度以补偿padding，让内容向上显示 */
         margin-top: -1.5rem; /* 地图内容向上移动 */
+        transform: scale(1.15); /* 放大地图内容15% */
+        transform-origin: center top; /* 从顶部中心点缩放 */
       }
       
       /* 移动端详情卡片优化 - 确保可以滚动 */
@@ -132,7 +134,8 @@
       }
       
       /* 移动端视图切换按钮优化 */
-      .view-switch-btn {
+      .view-switch-btn,
+      .view-switch-btn-mobile {
         min-height: 44px;
         touch-action: manipulation;
       }
@@ -181,9 +184,9 @@
       /* 移动端：详情区域在上方，占据更多空间 */
       .view-content > div > div:first-child {
         order: 2; /* 地图显示在下方 */
-        flex: 0 0 auto;
+        flex: 1 1 50%; /* 地图区域占50%高度 */
         min-height: 0;
-        max-height: 35vh; /* 地图高度限制为35vh，更矮一些 */
+        max-height: none; /* 移除高度限制，平分高度 */
         margin-top: 0; /* 移除margin，使用gap控制间距 */
         margin-bottom: 0;
       }
@@ -191,7 +194,7 @@
       /* 移动端：详情区域在上方 */
       .view-content > div > div:last-child {
         order: 1; /* 详情显示在上方 */
-        flex: 1 1 auto;
+        flex: 1 1 50%; /* 详情区域占50%高度 */
         min-height: 0;
         max-height: none;
         overflow-y: auto;
@@ -208,7 +211,12 @@
       
       .view-content > div > div:first-child {
         order: 2;
-        max-height: 35vh;
+        flex: 1 1 50%; /* 地图区域占50%高度 */
+        max-height: none; /* 移除高度限制 */
+      }
+      
+      .view-content > div > div:last-child {
+        flex: 1 1 50%; /* 详情区域占50%高度 */
       }
       
       .view-content > div > div:last-child {
@@ -333,21 +341,21 @@
         <div class="flex sm:hidden border border-slate-200 rounded-xl overflow-hidden bg-white w-full">
           <button
             id="view-detail-btn-mobile"
-            class="view-switch-btn-mobile active flex-1 px-3 py-2.5 text-xs font-medium border-r border-slate-200 bg-blue-600 hover:bg-blue-700 text-white transition min-h-[44px] touch-action: manipulation"
+            class="view-switch-btn-mobile active flex-1 px-3 py-2.5 text-xs font-medium border-r border-slate-200 bg-blue-600 hover:bg-blue-700 text-white transition min-h-[44px]"
             data-view="detail"
           >
             美食详情
           </button>
           <button
             id="view-graph-btn-mobile"
-            class="view-switch-btn-mobile flex-1 px-3 py-2.5 text-xs font-medium border-r border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition min-h-[44px] touch-action: manipulation"
+            class="view-switch-btn-mobile flex-1 px-3 py-2.5 text-xs font-medium border-r border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition min-h-[44px]"
             data-view="graph"
           >
             知识图谱
           </button>
           <button
             id="view-stats-btn-mobile"
-            class="view-switch-btn-mobile flex-1 px-3 py-2.5 text-xs font-medium bg-white hover:bg-slate-50 text-slate-700 transition min-h-[44px] touch-action: manipulation"
+            class="view-switch-btn-mobile flex-1 px-3 py-2.5 text-xs font-medium bg-white hover:bg-slate-50 text-slate-700 transition min-h-[44px]"
             data-view="stats"
           >
             统计图表

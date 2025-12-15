@@ -926,31 +926,52 @@ function switchView(view) {
   }
 }
 
-// 视图切换按钮事件（桌面端和移动端）
-document.getElementById('view-detail-btn')?.addEventListener('click', () => {
-  switchView('detail');
-});
+// 初始化视图切换按钮事件
+function initViewButtons() {
+  // 桌面端按钮事件
+  const detailBtn = document.getElementById('view-detail-btn');
+  const graphBtn = document.getElementById('view-graph-btn');
+  const statsBtn = document.getElementById('view-stats-btn');
+  
+  // 移动端按钮事件
+  const detailBtnMobile = document.getElementById('view-detail-btn-mobile');
+  const graphBtnMobile = document.getElementById('view-graph-btn-mobile');
+  const statsBtnMobile = document.getElementById('view-stats-btn-mobile');
+  
+  // 绑定桌面端按钮事件
+  detailBtn?.addEventListener('click', () => {
+    switchView('detail');
+  });
+  
+  graphBtn?.addEventListener('click', () => {
+    switchView('graph');
+  });
+  
+  statsBtn?.addEventListener('click', () => {
+    switchView('stats');
+  });
+  
+  // 绑定移动端按钮事件
+  detailBtnMobile?.addEventListener('click', () => {
+    switchView('detail');
+  });
+  
+  graphBtnMobile?.addEventListener('click', () => {
+    switchView('graph');
+  });
+  
+  statsBtnMobile?.addEventListener('click', () => {
+    switchView('stats');
+  });
+}
 
-document.getElementById('view-graph-btn')?.addEventListener('click', () => {
-  switchView('graph');
-});
-
-document.getElementById('view-stats-btn')?.addEventListener('click', () => {
-  switchView('stats');
-});
-
-// 移动端按钮事件
-document.getElementById('view-detail-btn-mobile')?.addEventListener('click', () => {
-  switchView('detail');
-});
-
-document.getElementById('view-graph-btn-mobile')?.addEventListener('click', () => {
-  switchView('graph');
-});
-
-document.getElementById('view-stats-btn-mobile')?.addEventListener('click', () => {
-  switchView('stats');
-});
+// 确保DOM加载完成后初始化按钮事件
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initViewButtons);
+} else {
+  // DOM已经加载完成，立即执行
+  initViewButtons();
+}
 
 // ========== 统计图表 ==========
 function updateStatsCharts() {

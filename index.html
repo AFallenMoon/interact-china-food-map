@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>一省一菜 · 中国美食地图</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -77,34 +78,117 @@
     .custom-scrollbar::-webkit-scrollbar-button:hover {
       background: rgba(59, 130, 246, 0.5);
     }
+    
+    /* 移动端优化 */
+    @media (max-width: 640px) {
+      /* 确保地图和详情区域在移动端有最小高度 */
+      .view-content > div > div {
+        min-height: 300px;
+      }
+      
+      /* 移动端地图容器优化 */
+      #chinaMap {
+        min-height: 300px;
+      }
+      
+      /* 移动端详情卡片优化 */
+      #foodDetail {
+        min-height: 300px;
+      }
+      
+      /* 移动端知识图谱优化 */
+      #knowledgeGraph {
+        min-height: 300px;
+      }
+      
+      /* 确保触摸目标足够大（至少44x44像素） */
+      button, input {
+        min-height: 44px;
+      }
+      
+      /* 移动端视图切换按钮优化 */
+      .view-switch-btn {
+        min-height: 44px;
+        touch-action: manipulation;
+      }
+    }
+    
+    /* 确保在小屏幕上内容不会溢出 */
+    @media (max-width: 1024px) {
+      .view-content {
+        overflow-y: auto;
+      }
+      
+      .view-content > div {
+        min-height: auto;
+      }
+    }
+    
+    /* 移动端触摸优化 */
+    @media (hover: none) and (pointer: coarse) {
+      /* 移动设备上的触摸优化 */
+      button, .view-switch-btn {
+        -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+        touch-action: manipulation;
+      }
+      
+      /* 移除移动端的hover效果 */
+      .group:hover .group-hover\:scale-110 {
+        transform: none;
+      }
+    }
+    
+    /* 自动适配布局：根据屏幕宽度和宽高比自动切换 */
+    /* 在窄屏（小于1280px）时使用单列布局，宽屏时使用两列布局 */
+    @media (max-width: 1279px) {
+      .view-content > div {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .view-content > div > div {
+        min-height: 400px;
+        max-height: 50vh;
+      }
+      
+      .view-content > div > div:first-child {
+        margin-bottom: 1rem;
+      }
+    }
+    
+    /* 使用屏幕宽高比检测：如果屏幕宽高比小于1.5（竖屏或接近正方形），使用单列布局 */
+    @media (max-aspect-ratio: 3/2) {
+      .view-content > div {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900">
   <div class="h-screen flex flex-col overflow-hidden">
     <!-- 顶部导航 -->
-    <header class="header px-6 py-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 backdrop-blur-md border-b border-slate-200/60">
-      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <!-- 左侧：标题与图标 -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+    <header class="header px-3 sm:px-6 py-3 sm:py-5 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 backdrop-blur-md border-b border-slate-200/60">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+        <!-- 标题与图标 -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg flex-shrink-0">
             <!-- Heroicons Map Pin Icon -->
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
-            <h1 class="text-xl font-bold text-slate-900">一省一菜</h1>
+            <h1 class="text-lg sm:text-xl font-bold text-slate-900">一省一菜</h1>
             <p class="text-xs text-slate-600">交互式中国美食地图</p>
           </div>
         </div>
 
-        <!-- 右侧：搜索框和视图切换 -->
-        <div class="flex items-center gap-3">
-          <div class="w-full md:w-64">
+        <!-- 搜索框和视图切换 -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 flex-1 w-full sm:w-auto">
+          <div class="w-full sm:w-64 flex-1">
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-4 w-4 sm:h-5 sm:w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -112,30 +196,30 @@
                 id="keywordInput"
                 type="text"
                 placeholder="搜索美食、省份、菜系..."
-                class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/90 border border-slate-200 text-sm placeholder:text-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 focus:bg-white transition-all"
+                class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-xl bg-white/90 border border-slate-200 text-sm placeholder:text-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 focus:bg-white transition-all"
               />
             </div>
           </div>
           
           <!-- 视图切换按钮 -->
-          <div class="flex border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="flex border border-slate-200 rounded-xl overflow-hidden bg-white w-full sm:w-auto">
             <button
               id="view-detail-btn"
-              class="view-switch-btn active px-4 py-2.5 text-sm font-medium border-r border-slate-200 bg-blue-600 hover:bg-blue-700 text-white transition"
+              class="view-switch-btn active flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border-r border-slate-200 bg-blue-600 hover:bg-blue-700 text-white transition"
               data-view="detail"
             >
               美食详情
             </button>
             <button
               id="view-graph-btn"
-              class="view-switch-btn px-4 py-2.5 text-sm font-medium border-r border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition"
+              class="view-switch-btn flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border-r border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition"
               data-view="graph"
             >
               知识图谱
             </button>
             <button
               id="view-stats-btn"
-              class="view-switch-btn px-4 py-2.5 text-sm font-medium bg-white hover:bg-slate-50 text-slate-700 transition"
+              class="view-switch-btn flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium bg-white hover:bg-slate-50 text-slate-700 transition"
               data-view="stats"
             >
               统计图表
@@ -146,8 +230,8 @@
     </header>
 
     <!-- 主内容区域 -->
-    <div class="view-content flex flex-col pb-6 px-6 pt-6 flex-1 min-h-0 overflow-hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch flex-1 min-h-0">
+    <div class="view-content flex flex-col pb-3 sm:pb-6 px-3 sm:px-6 pt-3 sm:pt-6 flex-1 min-h-0 overflow-hidden">
+      <div id="main-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-4 items-stretch flex-1 min-h-0">
         <!-- 左：地图模块 -->
         <div class="min-h-0 flex flex-col">
           <!-- 地图容器 -->
@@ -159,7 +243,7 @@
             <!-- 地图重置按钮 -->
             <button
               id="resetMapBtn"
-              class="absolute bottom-4 left-4 px-4 py-2 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-md transition-all duration-200 z-10"
+              class="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg text-xs sm:text-sm font-medium text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-md transition-all duration-200 z-10"
               title="重置地图"
             >
               重置
@@ -173,13 +257,13 @@
           <div id="detail-view" class="view-panel flex-1 flex flex-col min-h-0 group">
             <div id="foodDetail" class="flex-1 min-h-0 overflow-hidden bg-white/60 backdrop-blur-sm p-0 transition-all duration-300 group-hover:bg-white/80 rounded-xl border border-slate-200">
               <!-- 内容将通过 JavaScript 动态填充 -->
-              <div class="text-center py-12">
-                <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110">
-                  <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="text-center py-8 sm:py-12">
+                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                  <svg class="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <p class="text-slate-600 text-sm font-medium mb-2">选择省份查看美食</p>
+                <p class="text-slate-600 text-xs sm:text-sm font-medium mb-2">选择省份查看美食</p>
                 <p class="text-slate-400 text-xs">点击地图上的省份</p>
               </div>
             </div>
@@ -192,23 +276,23 @@
 
                   <!-- 统计图表视图 -->
                   <div id="stats-view" class="view-panel hidden flex-1 flex flex-col min-h-0 overflow-y-auto custom-scrollbar">
-                    <div class="px-4 pb-4 pt-0 space-y-4">
+                    <div class="px-2 sm:px-4 pb-3 sm:pb-4 pt-0 space-y-3 sm:space-y-4">
                       <!-- 口味分布 -->
-                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 px-4 pb-4 pt-0">
-                        <h3 class="text-sm font-semibold text-slate-900 mb-2 pt-4">口味分布</h3>
-                        <div id="tasteChart" class="w-full h-64"></div>
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 px-3 sm:px-4 pb-3 sm:pb-4 pt-0">
+                        <h3 class="text-xs sm:text-sm font-semibold text-slate-900 mb-2 pt-3 sm:pt-4">口味分布</h3>
+                        <div id="tasteChart" class="w-full h-48 sm:h-64"></div>
                       </div>
                       
                       <!-- 食材词云 -->
-                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-4">
-                        <h3 class="text-sm font-semibold text-slate-900 mb-2">食材词云</h3>
-                        <div id="ingredientWordCloud" class="w-full h-80"></div>
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-3 sm:p-4">
+                        <h3 class="text-xs sm:text-sm font-semibold text-slate-900 mb-2">食材词云</h3>
+                        <div id="ingredientWordCloud" class="w-full h-64 sm:h-80"></div>
                       </div>
                       
                       <!-- 起源时间 -->
-                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-4">
-                        <h3 class="text-sm font-semibold text-slate-900 mb-2">起源时间</h3>
-                        <div id="timeChart" class="w-full h-96"></div>
+                      <div class="bg-white/60 backdrop-blur-sm rounded-xl border border-slate-200 p-3 sm:p-4">
+                        <h3 class="text-xs sm:text-sm font-semibold text-slate-900 mb-2">起源时间</h3>
+                        <div id="timeChart" class="w-full h-72 sm:h-96"></div>
                       </div>
                     </div>
                   </div>

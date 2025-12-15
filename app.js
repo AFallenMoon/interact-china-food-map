@@ -131,12 +131,15 @@ async function initChinaMap() {
       { name: '澳门特别行政区', coord: [113.45, 22.10] },
     ];
 
+    // 检测是否为移动设备
+    const isMobile = window.innerWidth < 768;
+    
     const option = {
       backgroundColor: 'transparent',
       geo: {
         map: 'china',
         roam: true,
-        zoom: 1.5,
+        zoom: isMobile ? 1.2 : 1.5,
         center: [105, 36],
         selectedMode: 'multiple',
         itemStyle: {
@@ -287,11 +290,14 @@ async function initChinaMap() {
     chinaMapChart.setOption(option);
 
     window.addEventListener('resize', () => {
-      chinaMapChart && chinaMapChart.resize();
-      knowledgeGraphChart && knowledgeGraphChart.resize();
-      tasteChart && tasteChart.resize();
-      ingredientWordCloudChart && ingredientWordCloudChart.resize();
-      timeChart && timeChart.resize();
+      // 延迟执行resize，确保布局完成后再调整
+      setTimeout(() => {
+        chinaMapChart && chinaMapChart.resize();
+        knowledgeGraphChart && knowledgeGraphChart.resize();
+        tasteChart && tasteChart.resize();
+        ingredientWordCloudChart && ingredientWordCloudChart.resize();
+        timeChart && timeChart.resize();
+      }, 100);
     });
 
     let currentHoverProvinceCode = null;
@@ -395,14 +401,14 @@ function renderFoodDetail(list) {
 
   if (list.length === 0) {
     detailEl.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-16 text-center">
-        <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4">
-          <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex flex-col items-center justify-center py-12 sm:py-16 text-center">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-slate-100 flex items-center justify-center mb-3 sm:mb-4">
+          <svg class="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
-        <p class="text-sm text-slate-600 font-medium">暂无符合条件的美食</p>
-        <p class="text-xs text-slate-400 mt-2">请点击地图上的省份查看美食</p>
+        <p class="text-xs sm:text-sm text-slate-600 font-medium">暂无符合条件的美食</p>
+        <p class="text-[10px] sm:text-xs text-slate-400 mt-2">请点击地图上的省份查看美食</p>
       </div>
     `;
     return;
@@ -418,51 +424,51 @@ function renderFoodDetail(list) {
       <div class="absolute inset-0 bg-gradient-to-t from-slate-900/75 via-slate-900/50 to-slate-900/20"></div>
       
       <!-- 所有内容叠加在图片上 -->
-      <div class="absolute inset-0 flex flex-col justify-between p-5">
+      <div class="absolute inset-0 flex flex-col justify-between p-3 sm:p-5">
         <!-- 顶部：左侧省份和菜系标签，右侧口味标签 -->
-        <div class="flex items-start justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-xs font-medium border border-white/30">${province?.name || ''}</span>
-            <span class="px-2.5 py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-xs font-medium border border-white/30">${food.cuisine || ''}</span>
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium border border-white/30">${province?.name || ''}</span>
+            <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium border border-white/30">${food.cuisine || ''}</span>
           </div>
           <!-- 口味标签在右上角 -->
-          <div class="flex flex-wrap gap-1.5 justify-end max-w-[50%]">
+          <div class="flex flex-wrap gap-1 sm:gap-1.5 justify-end max-w-[50%]">
             ${(food.taste_tags || []).map(t => 
-              `<span class="px-2.5 py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-xs font-medium border border-white/30 drop-shadow-sm">${t}</span>`
+              `<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium border border-white/30 drop-shadow-sm">${t}</span>`
             ).join('')}
           </div>
         </div>
         
         <!-- 底部：详细信息 -->
-        <div class="space-y-4">
+        <div class="space-y-2 sm:space-y-4">
           <!-- 标题 -->
-          <h3 class="text-2xl font-bold text-white drop-shadow-lg mb-2">${food.name}</h3>
+          <h3 class="text-lg sm:text-2xl font-bold text-white drop-shadow-lg mb-1 sm:mb-2">${food.name}</h3>
           
           <!-- 简介：直接显示，无标题和缩进 -->
-          <p class="text-sm text-white/95 leading-relaxed drop-shadow-md mb-3">${food.description || ''}</p>
+          <p class="text-xs sm:text-sm text-white/95 leading-relaxed drop-shadow-md mb-2 sm:mb-3 line-clamp-3 sm:line-clamp-none">${food.description || ''}</p>
           
           <!-- 主要食材和历史起源并列 -->
-          <div class="flex items-start gap-4">
+          <div class="flex flex-col sm:flex-row items-start gap-2 sm:gap-4">
             <!-- 主要食材 -->
-            <div class="flex-[2]">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="text-xs font-semibold text-white drop-shadow-md">主要食材</div>
+            <div class="flex-[2] w-full sm:w-auto">
+              <div class="flex items-center gap-2 mb-1.5 sm:mb-2">
+                <div class="text-[10px] sm:text-xs font-semibold text-white drop-shadow-md">主要食材</div>
               </div>
-              <div class="flex flex-wrap gap-1.5">
+              <div class="flex flex-wrap gap-1 sm:gap-1.5">
                 ${(food.ingredients || []).map(ing => 
-                  `<span class="px-2.5 py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-xs font-medium border border-white/30 drop-shadow-sm">${ing}</span>`
+                  `<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg bg-white/25 backdrop-blur-sm text-white text-[10px] sm:text-xs font-medium border border-white/30 drop-shadow-sm">${ing}</span>`
                 ).join('')}
               </div>
             </div>
             
             ${food.history?.origin_year ? `
             <!-- 历史起源 -->
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="text-xs font-semibold text-white drop-shadow-md">历史起源</div>
+            <div class="flex-1 w-full sm:w-auto">
+              <div class="flex items-center gap-2 mb-1.5 sm:mb-2">
+                <div class="text-[10px] sm:text-xs font-semibold text-white drop-shadow-md">历史起源</div>
               </div>
-              <div class="text-xs text-white/95 drop-shadow-md">
-                约公元 <span class="text-base font-extrabold text-white drop-shadow-lg">${food.history.origin_year}</span> 年
+              <div class="text-[10px] sm:text-xs text-white/95 drop-shadow-md">
+                约公元 <span class="text-sm sm:text-base font-extrabold text-white drop-shadow-lg">${food.history.origin_year}</span> 年
               </div>
             </div>
             ` : ''}
@@ -644,11 +650,14 @@ function updateKnowledgeGraph(list) {
     },
     legend: {
       data: categories.map(c => c.name),
-      bottom: 15,
-      textStyle: { fontSize: 12, color: '#64748B' },
-      itemWidth: 14,
-      itemHeight: 14,
-      itemGap: 20,
+      bottom: window.innerWidth < 640 ? 10 : 15,
+      textStyle: { 
+        fontSize: window.innerWidth < 640 ? 10 : 12, 
+        color: '#64748B' 
+      },
+      itemWidth: window.innerWidth < 640 ? 12 : 14,
+      itemHeight: window.innerWidth < 640 ? 12 : 14,
+      itemGap: window.innerWidth < 640 ? 12 : 20,
       selectedMode: 'multiple', // 支持多选
       selected: legendSelected, // 设置默认选中状态
     },
@@ -662,7 +671,7 @@ function updateKnowledgeGraph(list) {
       label: {
         show: true,
         position: 'right',
-        fontSize: 12,
+        fontSize: window.innerWidth < 640 ? 10 : 12,
         color: '#334155',
         fontWeight: 'normal',
       },
@@ -825,10 +834,13 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
       });
     });
     
+    // 检测是否为移动设备
+    const isMobile = window.innerWidth < 768;
+    
     // 重置地图缩放和位置 - 使用 setOption 更新
     chinaMapChart.setOption({
       geo: {
-        zoom: 1.5,
+        zoom: isMobile ? 1.2 : 1.5,
         center: [105, 36]
       }
     }, false);
@@ -838,7 +850,7 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
     if (currentOption.series && currentOption.series[0]) {
       chinaMapChart.setOption({
         series: [{
-          zoom: 1.5,
+          zoom: isMobile ? 1.2 : 1.5,
           center: [105, 36]
         }]
       }, false);
@@ -970,17 +982,17 @@ function updateTasteChart(list) {
       formatter: '{b}: {c} 道美食'
     },
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      top: '5%',
+      left: window.innerWidth < 640 ? '8%' : '3%',
+      right: window.innerWidth < 640 ? '4%' : '4%',
+      bottom: window.innerWidth < 640 ? '5%' : '3%',
+      top: window.innerWidth < 640 ? '8%' : '5%',
       containLabel: true
     },
     xAxis: {
       type: 'value',
       max: 34,
       axisLabel: {
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#64748B'
       }
     },
@@ -988,7 +1000,7 @@ function updateTasteChart(list) {
       type: 'category',
       data: data.map(d => d.name),
       axisLabel: {
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#64748B'
       }
     },
@@ -1012,7 +1024,7 @@ function updateTasteChart(list) {
       label: {
         show: true,
         position: 'right',
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#1E293B'
       }
     }]
@@ -1196,10 +1208,10 @@ function updateTimeChart(list) {
       }
     },
     grid: {
-      left: '8%',
-      right: '8%',
-      bottom: '8%',
-      top: '8%',
+      left: window.innerWidth < 640 ? '12%' : '8%',
+      right: window.innerWidth < 640 ? '6%' : '8%',
+      bottom: window.innerWidth < 640 ? '12%' : '8%',
+      top: window.innerWidth < 640 ? '10%' : '8%',
       containLabel: false
     },
     xAxis: {
@@ -1220,9 +1232,9 @@ function updateTimeChart(list) {
         length: 6
       },
       axisLabel: {
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#64748B',
-        margin: 8,
+        margin: window.innerWidth < 640 ? 4 : 8,
         rotate: 0
       },
       nameTextStyle: {
@@ -1236,7 +1248,7 @@ function updateTimeChart(list) {
       type: 'value',
       name: '数量',
       nameLocation: 'middle',
-      nameGap: 40,
+      nameGap: window.innerWidth < 640 ? 30 : 40,
       axisLine: {
         show: true,
         lineStyle: {
@@ -1252,9 +1264,9 @@ function updateTimeChart(list) {
         length: 6
       },
       axisLabel: {
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#64748B',
-        margin: 8
+        margin: window.innerWidth < 640 ? 4 : 8
       },
       nameTextStyle: {
         fontSize: 13,
@@ -1293,13 +1305,42 @@ function updateTimeChart(list) {
         show: true,
         position: 'top',
         formatter: '{c}',
-        fontSize: 11,
+        fontSize: window.innerWidth < 640 ? 9 : 11,
         color: '#1E293B',
         fontWeight: '600'
       }
     }]
   });
 }
+
+// ========== 窗口大小改变时自动调整图表 ==========
+let resizeTimer = null;
+function handleResize() {
+  // 防抖处理，避免频繁resize
+  if (resizeTimer) {
+    clearTimeout(resizeTimer);
+  }
+  resizeTimer = setTimeout(() => {
+    if (chinaMapChart) {
+      chinaMapChart.resize();
+    }
+    if (knowledgeGraphChart) {
+      knowledgeGraphChart.resize();
+    }
+    if (tasteChart) {
+      tasteChart.resize();
+    }
+    if (ingredientWordCloudChart) {
+      ingredientWordCloudChart.resize();
+    }
+    if (timeChart) {
+      timeChart.resize();
+    }
+  }, 150);
+}
+
+// 监听窗口大小改变
+window.addEventListener('resize', handleResize);
 
 // 启动
 loadData();

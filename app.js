@@ -9,6 +9,7 @@ let timeChart = null;
 let activeProvinceCodes = new Set(); // 支持多选
 let lastSelectedProvinceCode = null; // 记录最后选中的省份
 let keyword = '';
+let currentView = 'detail'; // 'detail'、'graph' 或 'stats'
 
 // 节点类型配置（颜色确保无重复且具有高区分度）
 // 节点大小：美食最大（中心节点），口味其次，食材最小
@@ -21,6 +22,12 @@ const nodeTypeConfig = {
 
 // 默认只显示美食和口味，食材为可选项
 let visibleNodeTypes = new Set(['food', 'taste']);
+
+// 小面积地区的坐标和标记点配置（用于增加点击区域）
+const smallAreaMarkers = [
+  { name: '香港特别行政区', coord: [114.25, 22.35] },
+  { name: '澳门特别行政区', coord: [113.45, 22.10] },
+];
 
 // ========== 数据加载 ==========
 async function loadData() {
@@ -47,11 +54,6 @@ async function loadData() {
 // ========== 更新标记点样式 ==========
 function updateMarkerStyles() {
   if (!chinaMapChart) return;
-  
-  const smallAreaMarkers = [
-    { name: '香港特别行政区', coord: [114.25, 22.35] },
-    { name: '澳门特别行政区', coord: [113.45, 22.10] },
-  ];
   
   const markerData = smallAreaMarkers.map(marker => {
     const province = provinces.find(p => p.name === marker.name);
@@ -125,12 +127,6 @@ async function initChinaMap() {
       return { name: p.name, value: count };
     });
 
-    // 小面积地区的坐标和标记点配置（用于增加点击区域）
-    const smallAreaMarkers = [
-      { name: '香港特别行政区', coord: [114.25, 22.35] },
-      { name: '澳门特别行政区', coord: [113.45, 22.10] },
-    ];
-
     // 检测是否为移动设备
     const isMobile = window.innerWidth < 768;
     
@@ -139,7 +135,7 @@ async function initChinaMap() {
       geo: {
         map: 'china',
         roam: true,
-        zoom: isMobile ? 1.2 : 1.5,
+        zoom: isMobile ? 2 : 1.6, // 使用zoom控制缩放：移动端2，电脑端1.6
         center: [105, 36],
         selectedMode: 'multiple',
         itemStyle: {
@@ -148,7 +144,7 @@ async function initChinaMap() {
           borderWidth: 1,
         },
         emphasis: {
-          disabled: false,
+          disabled: isMobile, // 移动端禁用悬浮效果
           itemStyle: {
             areaColor: '#EFF6FF',
             borderColor: '#3B82F6',
@@ -197,7 +193,7 @@ async function initChinaMap() {
             borderWidth: 1,
           },
           emphasis: {
-            disabled: false,
+            disabled: isMobile, // 移动端禁用悬浮效果
             itemStyle: {
               areaColor: '#EFF6FF',
               borderColor: '#3B82F6',
@@ -267,6 +263,7 @@ async function initChinaMap() {
             shadowColor: 'rgba(0, 0, 0, 0.1)',
           },
           emphasis: {
+            disabled: isMobile, // 移动端禁用悬浮效果
             itemStyle: {
               color: '#EFF6FF',
               borderColor: '#3B82F6',
@@ -288,60 +285,56 @@ async function initChinaMap() {
     };
 
     chinaMapChart.setOption(option);
-
-    window.addEventListener('resize', () => {
-      // 延迟执行resize，确保布局完成后再调整
-      setTimeout(() => {
-        chinaMapChart && chinaMapChart.resize();
-        knowledgeGraphChart && knowledgeGraphChart.resize();
-        tasteChart && tasteChart.resize();
-        ingredientWordCloudChart && ingredientWordCloudChart.resize();
-        timeChart && timeChart.resize();
-      }, 100);
-    });
+    
+    // 初始化后，确保地图选中状态与 activeProvinceCodes 同步
+    // 只在初始化时同步一次，之后只通过点击地图来改变
+    syncMapSelection();
 
     let currentHoverProvinceCode = null;
     let hoverTimeout = null;
     
-    chinaMapChart.on('mouseover', (params) => {
-      // 支持地图区域和标记点的悬停
-      if (params.seriesType !== 'map' && params.seriesType !== 'scatter') return;
-      const province = provinces.find(p => p.name === params.name);
-      if (!province) return;
-      
-      currentHoverProvinceCode = province.code;
-      
-      // 清除之前的延迟
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-      
-      // 延迟更新详情，避免频繁切换
-      hoverTimeout = setTimeout(() => {
-        // 临时更新详情和图谱（不改变 activeProvinceCodes）
-        updateDetailOnHover(province.code);
-      }, 150);
-    });
-
-    chinaMapChart.on('globalout', () => {
-      currentHoverProvinceCode = null;
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-      
-      // 恢复显示当前选中的省份（如果有），否则显示所有数据
-      // 注意：悬停时不改变选中状态，只临时更新显示
-      if (activeProvinceCodes.size > 0) {
-        applyFilters();
-      } else {
-        // 如果没有选中，显示所有数据
-        if (currentView === 'detail') {
-          renderFoodDetail(foods);
-        } else {
-          updateKnowledgeGraph(foods);
+    // 只在非移动端绑定鼠标悬浮事件
+    if (!isMobile) {
+      chinaMapChart.on('mouseover', (params) => {
+        // 支持地图区域和标记点的悬停
+        if (params.seriesType !== 'map' && params.seriesType !== 'scatter') return;
+        const province = provinces.find(p => p.name === params.name);
+        if (!province) return;
+        
+        currentHoverProvinceCode = province.code;
+        
+        // 清除之前的延迟
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
         }
-      }
-    });
+        
+        // 延迟更新详情，避免频繁切换
+        hoverTimeout = setTimeout(() => {
+          // 临时更新详情和图谱（不改变 activeProvinceCodes）
+          updateDetailOnHover(province.code);
+        }, 150);
+      });
+
+      chinaMapChart.on('globalout', () => {
+        currentHoverProvinceCode = null;
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+        }
+        
+        // 恢复显示当前选中的省份（如果有），否则显示所有数据
+        // 注意：悬停时不改变选中状态，只临时更新显示
+        if (activeProvinceCodes.size > 0) {
+          applyFilters();
+        } else {
+          // 如果没有选中，显示所有数据
+          if (currentView === 'detail') {
+            renderFoodDetail(foods);
+          } else {
+            updateKnowledgeGraph(foods);
+          }
+        }
+      });
+    }
 
     // 地图点击选择（支持多选）- 支持地图区域和标记点点击
     chinaMapChart.on('click', (params) => {
@@ -589,9 +582,6 @@ function updateKnowledgeGraph(list) {
       knowledgeGraphChart.dispose();
     }
     knowledgeGraphChart = echarts.init(el);
-    window.addEventListener('resize', () => {
-      knowledgeGraphChart && knowledgeGraphChart.resize();
-    });
   }
 
   // 构建 categories 数组，包含所有节点类型
@@ -765,39 +755,47 @@ function updateDetailOnHover(provinceCode) {
 
 // ========== 筛选和更新 ==========
 function applyFilters() {
-  let filtered = [...foods];
-
-  if (activeProvinceCodes.size > 0) {
-    filtered = filtered.filter(f => activeProvinceCodes.has(f.province_code));
+  // 根据当前视图决定过滤逻辑
+  if (currentView === 'detail') {
+    // 美食详情视图：支持搜索功能
+    let filtered = [...foods];
     
-    // 如果有最后选中的省份，优先显示该省份的美食详情
-    if (lastSelectedProvinceCode) {
-      const lastSelectedFoods = filtered.filter(f => f.province_code === lastSelectedProvinceCode);
-      if (lastSelectedFoods.length > 0 && currentView === 'detail') {
-        // 将最后选中的省份的美食放在最前面
-        filtered = [
-          ...lastSelectedFoods,
-          ...filtered.filter(f => f.province_code !== lastSelectedProvinceCode)
-        ];
+    // 搜索逻辑：如果有搜索关键词，在整个数据集中搜索，不应用省份过滤
+    // 注意：搜索只改变显示内容，不会修改 activeProvinceCodes
+    // activeProvinceCodes 只通过用户点击地图来改变
+    if (keyword.trim()) {
+      const kw = keyword.trim().toLowerCase();
+      filtered = filtered.filter(f => {
+        const province = provinces.find(p => p.code === f.province_code);
+        const text = `${f.name} ${province?.name || ''} ${f.cuisine || ''} ${(f.taste_tags || []).join(' ')} ${(f.ingredients || []).join(' ')} ${f.description || ''}`.toLowerCase();
+        return text.includes(kw);
+      });
+    } else if (activeProvinceCodes.size > 0) {
+      // 没有搜索关键词时，根据选中的省份过滤
+      filtered = filtered.filter(f => activeProvinceCodes.has(f.province_code));
+      
+      // 如果有最后选中的省份，优先显示该省份的美食详情
+      if (lastSelectedProvinceCode) {
+        const lastSelectedFoods = filtered.filter(f => f.province_code === lastSelectedProvinceCode);
+        if (lastSelectedFoods.length > 0) {
+          filtered = [
+            ...lastSelectedFoods,
+            ...filtered.filter(f => f.province_code !== lastSelectedProvinceCode)
+          ];
+        }
       }
     }
-  }
-
-  if (keyword.trim()) {
-    const kw = keyword.trim().toLowerCase();
-    filtered = filtered.filter(f => {
-      const province = provinces.find(p => p.code === f.province_code);
-      const text = `${f.name} ${province?.name || ''} ${f.cuisine || ''} ${(f.taste_tags || []).join(' ')} ${(f.ingredients || []).join(' ')} ${f.description || ''}`.toLowerCase();
-      return text.includes(kw);
-    });
-  }
-
-  // 根据当前视图更新对应内容
-  if (currentView === 'detail') {
+    
     renderFoodDetail(filtered);
   } else if (currentView === 'graph') {
+    // 知识图谱视图：不受搜索影响，只根据选中的省份过滤
+    let filtered = [...foods];
+    if (activeProvinceCodes.size > 0) {
+      filtered = filtered.filter(f => activeProvinceCodes.has(f.province_code));
+    }
     updateKnowledgeGraph(filtered);
   } else if (currentView === 'stats') {
+    // 统计图表视图：不受搜索影响，只根据选中的省份过滤
     updateStatsCharts();
   }
 }
@@ -807,9 +805,38 @@ function applyFilters() {
 // 搜索输入
 document.getElementById('keywordInput')?.addEventListener('input', (e) => {
   keyword = e.target.value;
-  // 搜索时不清空选中状态，保持多选
+  // 搜索时只更新显示内容，不影响地图选中状态（activeProvinceCodes）
+  // 地图选中状态只通过点击地图来改变
+  // 搜索结果只影响美食详情视图，不影响知识图谱和统计图表
   applyFilters();
 });
+
+// 同步地图选中状态，确保地图显示与 activeProvinceCodes 一致
+function syncMapSelection() {
+  if (!chinaMapChart) return;
+  
+  // 先取消所有省份的选中状态
+  provinces.forEach(province => {
+    chinaMapChart.dispatchAction({
+      type: 'unselect',
+      name: province.name
+    });
+  });
+  
+  // 然后只选中 activeProvinceCodes 中的省份
+  activeProvinceCodes.forEach(code => {
+    const province = provinces.find(p => p.code === code);
+    if (province) {
+      chinaMapChart.dispatchAction({
+        type: 'select',
+        name: province.name
+      });
+    }
+  });
+  
+  // 更新标记点样式
+  updateMarkerStyles();
+}
 
 // 地图重置按钮
 document.getElementById('resetMapBtn')?.addEventListener('click', () => {
@@ -866,63 +893,51 @@ document.getElementById('resetMapBtn')?.addEventListener('click', () => {
 
 
 // ========== 视图切换 ==========
-let currentView = 'detail'; // 'detail'、'graph' 或 'stats'
-
 function switchView(view) {
   currentView = view;
   
-  const detailView = document.getElementById('detail-view');
-  const graphView = document.getElementById('graph-view');
-  const statsView = document.getElementById('stats-view');
-  const detailBtn = document.getElementById('view-detail-btn');
-  const graphBtn = document.getElementById('view-graph-btn');
-  const statsBtn = document.getElementById('view-stats-btn');
-  const detailBtnMobile = document.getElementById('view-detail-btn-mobile');
-  const graphBtnMobile = document.getElementById('view-graph-btn-mobile');
-  const statsBtnMobile = document.getElementById('view-stats-btn-mobile');
+  const views = {
+    detail: { view: document.getElementById('detail-view'), btn: document.getElementById('view-detail-btn'), btnMobile: document.getElementById('view-detail-btn-mobile') },
+    graph: { view: document.getElementById('graph-view'), btn: document.getElementById('view-graph-btn'), btnMobile: document.getElementById('view-graph-btn-mobile') },
+    stats: { view: document.getElementById('stats-view'), btn: document.getElementById('view-stats-btn'), btnMobile: document.getElementById('view-stats-btn-mobile') }
+  };
   
-  // 重置所有按钮样式（桌面端和移动端）
-  [detailBtn, graphBtn, statsBtn, detailBtnMobile, graphBtnMobile, statsBtnMobile].forEach(btn => {
-    if (btn) {
-      btn.classList.remove('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-      btn.classList.add('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    }
+  // 重置所有按钮样式和视图
+  Object.values(views).forEach(({ view: viewEl, btn, btnMobile }) => {
+    viewEl?.classList.add('hidden');
+    [btn, btnMobile].forEach(button => {
+      if (button) {
+        button.classList.remove('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
+        button.classList.add('bg-white', 'hover:bg-slate-50', 'text-slate-700');
+      }
+    });
   });
   
-  // 隐藏所有视图
-  detailView?.classList.add('hidden');
-  graphView?.classList.add('hidden');
-  statsView?.classList.add('hidden');
-  
-  if (view === 'detail') {
-    detailView?.classList.remove('hidden');
-    detailBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    detailBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    detailBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    detailBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    applyFilters();
-  } else if (view === 'graph') {
-    graphView?.classList.remove('hidden');
-    graphBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    graphBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    graphBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    graphBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    applyFilters();
-    setTimeout(() => {
-      knowledgeGraphChart && knowledgeGraphChart.resize();
-    }, 100);
-  } else if (view === 'stats') {
-    statsView?.classList.remove('hidden');
-    statsBtn?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    statsBtn?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    statsBtnMobile?.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
-    statsBtnMobile?.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
-    updateStatsCharts();
-    setTimeout(() => {
-      tasteChart && tasteChart.resize();
-      ingredientWordCloudChart && ingredientWordCloudChart.resize();
-      timeChart && timeChart.resize();
-    }, 100);
+  // 激活当前视图
+  const current = views[view];
+  if (current) {
+    current.view?.classList.remove('hidden');
+    [current.btn, current.btnMobile].forEach(button => {
+      if (button) {
+        button.classList.add('active', 'bg-blue-600', 'hover:bg-blue-700', 'text-white');
+        button.classList.remove('bg-white', 'hover:bg-slate-50', 'text-slate-700');
+      }
+    });
+    
+    // 更新内容
+    if (view === 'detail' || view === 'graph') {
+      applyFilters();
+      if (view === 'graph') {
+        setTimeout(() => knowledgeGraphChart?.resize(), 100);
+      }
+    } else if (view === 'stats') {
+      updateStatsCharts();
+      setTimeout(() => {
+        tasteChart?.resize();
+        ingredientWordCloudChart?.resize();
+        timeChart?.resize();
+      }, 100);
+    }
   }
 }
 
@@ -940,16 +955,16 @@ function initViewButtons() {
   
   // 绑定桌面端按钮事件
   detailBtn?.addEventListener('click', () => {
-    switchView('detail');
-  });
-  
+  switchView('detail');
+});
+
   graphBtn?.addEventListener('click', () => {
-    switchView('graph');
-  });
-  
+  switchView('graph');
+});
+
   statsBtn?.addEventListener('click', () => {
-    switchView('stats');
-  });
+  switchView('stats');
+});
   
   // 绑定移动端按钮事件
   detailBtnMobile?.addEventListener('click', () => {
@@ -976,19 +991,11 @@ if (document.readyState === 'loading') {
 // ========== 统计图表 ==========
 function updateStatsCharts() {
   // 获取当前筛选后的数据
+  // 统计图表不受搜索影响，只根据选中的省份过滤
   let filtered = [...foods];
   
   if (activeProvinceCodes.size > 0) {
     filtered = filtered.filter(f => activeProvinceCodes.has(f.province_code));
-  }
-  
-  if (keyword.trim()) {
-    const kw = keyword.trim().toLowerCase();
-    filtered = filtered.filter(f => {
-      const province = provinces.find(p => p.code === f.province_code);
-      const text = `${f.name} ${province?.name || ''} ${f.cuisine || ''} ${(f.taste_tags || []).join(' ')} ${(f.ingredients || []).join(' ')} ${f.description || ''}`.toLowerCase();
-      return text.includes(kw);
-    });
   }
   
   updateTasteChart(filtered);
@@ -1080,7 +1087,7 @@ function updateIngredientWordCloud(list) {
   if (!el || !window.echarts) return;
   
   // 检查 wordcloud 插件是否加载
-  if (!echarts.registerMap) {
+  if (!window.echarts?.graphic?.LinearGradient) {
     console.warn('ECharts wordcloud plugin not loaded');
     return;
   }
